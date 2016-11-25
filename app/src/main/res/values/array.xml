@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string-array name="array_CmdsDescription">
+        <item>开始测量</item>
+        <item>距离单位</item>
+        <item>角度单位</item>
+        <item>测量模式</item>
+        <item>蓝牙开</item>
+        <item>蓝牙关</item>
+        <item>近距离模式</item>
+        <item>远距离模式</item>
+        <item>关机</item>
+    </string-array>
+    <string-array name="array_CmdsString">
+        <item>ST</item>
+        <item>DU</item>
+        <item>AU</item>
+        <item>DM</item>
+        <item>BO</item>
+        <item>BF</item>
+        <item>CL</item>
+        <item>FA</item>
+        <item>PF</item>
+    </string-array>
+    <string-array name="array_ParaOfDU">
+        <item>米</item>
+        <item>码</item>
+    </string-array>
+    <string-array name="array_ParaOfAU">
+        <item>度</item>
+        <item>百分比</item>
+    </string-array>
+    <string-array name="array_ParaOfDM">
+        <item>VD ML</item>
+        <item>HD ML</item>
+        <item>HT</item>
+        <item>HD HT</item>
+        <item>HD/SD</item>
+        <item>VD</item>
+        <item>SD ML</item>
+        <item>AZ</item>
+    </string-array>
+
+</resources>

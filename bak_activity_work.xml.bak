@@ -1,0 +1,385 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/activity_work"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:keepScreenOn="true"
+    tools:context="com.gzcz.rtchen.rxiry.WorkActivity">
+
+    <LinearLayout
+        android:orientation="horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:id="@+id/Background"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentStart="true">
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:paddingTop="3dp"
+            android:paddingEnd="3dp"
+            android:layout_weight="1"
+            android:id="@+id/FpvArea"
+            tools:ignore="RtlSymmetry">
+
+            <RelativeLayout
+                android:orientation="horizontal"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/RxiryModeArea">
+
+                <TextView
+                    android:text="测距仪当前模式："
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/lb_Mode"/>
+
+                <TextView
+                    android:layout_toRightOf="@+id/lb_Mode"
+                    android:text="VD ML"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/tv_RxiryMode"/>
+            </RelativeLayout>
+
+
+
+            <RelativeLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/PreviewArea"
+                android:layout_below="@+id/RxiryModeArea"
+                android:layout_above="@+id/ProjectArea"
+                android:layout_alignParentEnd="true"
+                android:layout_alignParentStart="true">
+
+                <com.gzcz.rtchen.rxiry.BaseFpvView
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"/>
+
+            </RelativeLayout>
+
+            <LinearLayout
+                android:orientation="vertical"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/ProjectArea"
+                android:layout_alignParentBottom="true">
+
+
+                <RelativeLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:paddingTop="3dp"
+                    android:id="@+id/ProjectNameArea">
+
+                    <TextView
+                        android:text="工程名称："
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:id="@+id/lb_ProjectName" />
+
+                    <Spinner
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:id="@+id/sp_ProjectName"
+                        android:spinnerMode="dialog"
+                        android:layout_centerVertical="true"
+                        android:layout_toEndOf="@+id/lb_ProjectName" />
+                </RelativeLayout>
+
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/DotNameArea">
+
+
+                    <TextView
+                        android:text="测量点名称："
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_centerVertical="true"
+                        android:id="@+id/lb_DotName" />
+
+                    <EditText
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_toEndOf="@+id/lb_DotName"
+                        android:inputType="text"
+                        android:id="@+id/et_DotName"
+                        android:hint="请输入测量点名称"
+                        android:maxLines="1" />
+
+                </RelativeLayout>
+            </LinearLayout>
+
+        </RelativeLayout>
+
+        <LinearLayout
+            android:orientation="vertical"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_weight="1.5"
+            android:id="@+id/DataArea">
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:id="@+id/Tst1Area"
+                android:layout_weight="1">
+
+                <ImageView
+                    app:srcCompat="@android:color/darker_gray"
+                    android:id="@+id/iv_Tst1"
+                    android:layout_alignParentTop="true"
+                    android:layout_alignParentStart="true"
+                    android:layout_width="100dp"
+                    android:layout_height="100dp" />
+
+                <LinearLayout
+                    android:orientation="vertical"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:id="@+id/Tst1DataArea"
+                    android:layout_toEndOf="@+id/iv_Tst1">
+
+                    <RelativeLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:id="@+id/Tst1ValueSdArea">
+
+                        <TextView
+                            android:text="SD值："
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:id="@+id/lb_Tst1ValueSd" />
+
+                        <TextView
+                            android:text="0.0米/码"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:id="@+id/tv_Tst1ValueSd"
+                            android:layout_alignParentTop="true"
+                            android:layout_toEndOf="@+id/lb_Tst1ValueSd" />
+                    </RelativeLayout>
+
+                    <RelativeLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:id="@+id/Tst1ValueIncArea">
+
+                        <TextView
+                            android:text="倾角值："
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:id="@+id/lb_Tst1ValueInc" />
+
+                        <TextView
+                            android:text="0.0度/%"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:id="@+id/tv_Tst1ValueInc"
+                            android:layout_alignParentTop="true"
+                            android:layout_toEndOf="@+id/lb_Tst1ValueInc" />
+                    </RelativeLayout>
+
+                </LinearLayout>
+            </RelativeLayout>
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:id="@+id/Tst2Area"
+                android:layout_weight="1">
+
+                <ImageView
+                    app:srcCompat="@android:color/darker_gray"
+                    android:id="@+id/iv_Tst2"
+                    android:layout_alignParentTop="true"
+                    android:layout_alignParentStart="true"
+                    android:layout_width="100dp"
+                    android:layout_height="100dp" />
+
+                <LinearLayout
+                    android:orientation="vertical"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:id="@+id/Tst2DataArea"
+                    android:layout_toEndOf="@+id/iv_Tst2">
+
+                    <RelativeLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:id="@+id/Tst2ValueSdArea">
+
+                        <TextView
+                            android:text="SD值："
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:id="@+id/lb_Tst2ValueSd" />
+
+                        <TextView
+                            android:text="0.0米/码"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:id="@+id/tv_Tst2ValueSd"
+                            android:layout_alignParentTop="true"
+                            android:layout_toEndOf="@+id/lb_Tst2ValueSd" />
+                    </RelativeLayout>
+
+                    <RelativeLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:id="@+id/Tst2ValueIncArea">
+
+                        <TextView
+                            android:text="倾角值："
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:id="@+id/lb_Tst2ValueInc" />
+
+                        <TextView
+                            android:text="0.0度/%"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:id="@+id/tv_Tst2ValueInc"
+                            android:layout_alignParentTop="true"
+                            android:layout_toEndOf="@+id/lb_Tst2ValueInc"/>
+                    </RelativeLayout>
+                </LinearLayout>
+
+
+            </RelativeLayout>
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:id="@+id/ResultArea"
+                android:layout_weight="1">
+
+                <ImageView
+                    app:srcCompat="@android:color/darker_gray"
+                    android:id="@+id/iv_Result"
+                    android:layout_alignParentTop="true"
+                    android:layout_alignParentStart="true"
+                    android:layout_width="100dp"
+                    android:layout_height="100dp" />
+
+                <LinearLayout
+                    android:orientation="vertical"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:id="@+id/ResultDataArea"
+                    android:layout_toEndOf="@+id/iv_Result">
+
+                    <RelativeLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:id="@+id/ResultValueHdArea">
+
+                        <TextView
+                            android:text="HD值："
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:id="@+id/lb_ResultValueHd" />
+
+                        <TextView
+                            android:text="0.0米/码"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:id="@+id/tv_ResultValueHd"
+                            android:layout_alignParentTop="true"
+                            android:layout_toEndOf="@+id/lb_ResultValueHd" />
+                    </RelativeLayout>
+
+                    <RelativeLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:id="@+id/ResultValueVdArea">
+
+                        <TextView
+                            android:text="VD值："
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:id="@+id/lb_ResultValueVd" />
+
+                        <TextView
+                            android:text="0.0米/码"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:id="@+id/tv_ResultValueVd"
+                            android:layout_alignParentTop="true"
+                            android:layout_toEndOf="@+id/lb_ResultValueVd" />
+                    </RelativeLayout>
+
+                    <RelativeLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:id="@+id/ResultValueSdArea">
+
+                        <TextView
+                            android:text="SD值："
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:id="@+id/lb_ResultValueSd" />
+
+                        <TextView
+                            android:text="0.0米/码"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:id="@+id/tv_ResultValueSd"
+                            android:layout_alignParentTop="true"
+                            android:layout_toEndOf="@+id/lb_ResultValueSd" />
+                    </RelativeLayout>
+
+                    <RelativeLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:id="@+id/ResultValueIncArea">
+
+                        <TextView
+                            android:text="倾角值："
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:id="@+id/lb_ResultValueInc"
+                            android:layout_alignParentTop="true"
+                            android:layout_alignParentStart="true" />
+
+                        <TextView
+                            android:text="0.0度/%"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:id="@+id/tv_ResultValueInc"
+                            android:layout_alignParentTop="true"
+                            android:layout_toEndOf="@+id/lb_ResultValueInc" />
+                    </RelativeLayout>
+
+                    <RelativeLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:id="@+id/ResultValueAzArea">
+
+                        <TextView
+                            android:text="方位角值："
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:id="@+id/lb_ResultValueAz" />
+
+                        <TextView
+                            android:text="0.0度/%"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:id="@+id/tv_ResultValueAz"
+                            android:layout_alignParentTop="true"
+                            android:layout_toEndOf="@+id/lb_ResultValueAz" />
+                    </RelativeLayout>
+                </LinearLayout>
+            </RelativeLayout>
+        </LinearLayout>
+
+    </LinearLayout>
+</RelativeLayout>

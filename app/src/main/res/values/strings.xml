@@ -1,0 +1,23 @@
+<resources>
+    <string name="app_name">Rxiry</string>
+
+    <!-- DJI SDK UI -->
+    <string name="sdk_version">DJI SDK Version: 3.4.1</string>
+    <string name="sdk_registration_message">SDK Registration Failed. Please check the bundle ID and your network connectivity</string>
+
+    <!-- Rxiry String : Unit -->
+    <string name="rxiry_Metre">米</string>
+    <string name="rxiry_Yard">码</string>
+    <string name="rxiry_Degree">度</string>
+    <string name="rxiry_Percent">%</string>
+    <string name="rxiry_Unknown">-</string>
+    <!-- Rxiry String : Value -->
+    <string name="rxiry_SD">SD值：</string>
+    <string name="rxiry_VD">VD值：</string>
+    <string name="rxiry_HD">HD值：</string>
+    <string name="rxiry_HT">高度值：</string>
+    <string name="rxiry_AZ">方位角值：</string>
+    <string name="rxiry_INC">倾角值：</string>
+
+
+</resources>
