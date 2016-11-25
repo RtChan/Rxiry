@@ -75,7 +75,7 @@ public class MainActivity extends AppCompatActivity {
                 case R.id.btn_Working:
                     Intent intent = new Intent(MainActivity.this, WorkActivity.class);
                     startActivity(intent);
-                    finish();
+//                    finish();
                     break;
                 default:
                     Log.d(TAG, "onClick: " + "Error! Unknown button.");

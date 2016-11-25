@@ -133,7 +133,7 @@
                 android:layout_height="wrap_content"
                 android:id="@+id/lb_DataTitle" />
 
-            <com.gzcz.rtchen.rxiry.AutoScrollView
+            <ScrollView
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:id="@+id/DisplayArea"
@@ -151,7 +151,7 @@
                         android:id="@+id/tv_ResultDisplay" />
 
                 </LinearLayout>
-            </com.gzcz.rtchen.rxiry.AutoScrollView>
+            </ScrollView>
 
             <LinearLayout
                 android:orientation="horizontal"

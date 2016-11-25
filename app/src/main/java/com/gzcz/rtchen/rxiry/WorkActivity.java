@@ -16,16 +16,19 @@ import android.widget.ScrollView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import dji.common.remotecontroller.DJIRCHardwareState;
 import dji.sdk.base.DJIBaseProduct;
 import dji.sdk.flightcontroller.DJIFlightController;
 import dji.sdk.flightcontroller.DJIFlightControllerDelegate;
 import dji.sdk.products.DJIAircraft;
+import dji.sdk.remotecontroller.DJIRemoteController;
 
 public class WorkActivity extends AppCompatActivity {
     private static final String TAG = "WorkActivity";
 
     private DJIBaseProduct mProduct;
     private DJIFlightController mFlightController;
+    private DJIRemoteController mRemoteController;
 
     StringBuffer mSerialMessage = new StringBuffer();
     RxiryMsgHelper mRxiryMsgHelper = new RxiryMsgHelper();
@@ -83,15 +86,6 @@ public class WorkActivity extends AppCompatActivity {
         mFlightController.setReceiveExternalDeviceDataCallback(new DJIFlightControllerDelegate.FlightControllerReceivedDataFromExternalDeviceCallback() {
             @Override
             public void onResult(final byte[] bytes) {
-                Handler handler = new Handler(Looper.getMainLooper());
-
-//                handler.post(new Runnable() {
-//                    @Override
-//                    public void run() {
-//                        Toast.makeText(getApplicationContext(), "Recv:" + new String(bytes), Toast.LENGTH_SHORT).show();
-//                    }
-//                });
-
 
                 for (byte b : bytes) {
                     if (b == '@') {
@@ -106,7 +100,7 @@ public class WorkActivity extends AppCompatActivity {
 
                         if (str.isEmpty()) break;
 
-                        handler.post(new Runnable() {
+                        mMainLoopHandler.post(new Runnable() {
                             @Override
                             public void run() {
                                 Toast.makeText(getApplicationContext(), "Recv:" + new String(bytes), Toast.LENGTH_SHORT).show();
@@ -120,6 +114,33 @@ public class WorkActivity extends AppCompatActivity {
                 }
             }
         });
+
+        mRemoteController = ((DJIAircraft) mProduct).getRemoteController();
+        if (null == mRemoteController) return;
+
+        mRemoteController.setHardwareStateUpdateCallback(new DJIRemoteController.RCHardwareStateUpdateCallback() {
+            @Override
+            public void onHardwareStateUpdate(DJIRemoteController djiRemoteController, DJIRCHardwareState djircHardwareState) {
+
+                if (djircHardwareState.customButton1.buttonDown) {
+                    mMainLoopHandler.post(new Runnable() {
+                        @Override
+                        public void run() {
+                            Toast.makeText(getApplicationContext(), "左键C1按下", Toast.LENGTH_SHORT).show();
+                        }
+                    });
+                }
+                if (djircHardwareState.customButton2.buttonDown) {
+                    mMainLoopHandler.post(new Runnable() {
+                        @Override
+                        public void run() {
+                            Toast.makeText(getApplicationContext(), "右键C2按下", Toast.LENGTH_SHORT).show();
+                        }
+                    });
+                }
+            }
+        });
+
     }
 
     protected void parseMessage(String str) {
@@ -155,7 +176,6 @@ public class WorkActivity extends AppCompatActivity {
                 mScroll.fullScroll(ScrollView.FOCUS_DOWN);
             }
         }, 500);
-
 
         if (3 == curStep) {
             curStep = 1;
@@ -228,5 +248,11 @@ public class WorkActivity extends AppCompatActivity {
                 tv_ResultDisplay.append("\r\n\r\n");
             }
         });
+    }
+
+    @Override
+    protected void onDestroy() {
+        mRemoteController.setHardwareStateUpdateCallback(null);
+        super.onDestroy();
     }
 }
