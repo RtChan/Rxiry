@@ -42,7 +42,7 @@ public class DataDebugActivity extends AppCompatActivity {
 
     StringBuffer mSerialMessage = new StringBuffer();
     //ArrayList<String> mSerialMessageList = new ArrayList<>();
-    RxiryMsgHelper mRxiryMsgHelper = new RxiryMsgHelper();
+    OnboardSdkMsgHelper mOnboardSdkMsgHelper = new OnboardSdkMsgHelper();
 
     Spinner mSpinnerCmd  = null;
     Spinner mSpinnerParm = null;
@@ -96,7 +96,7 @@ public class DataDebugActivity extends AppCompatActivity {
             /**
              *  @ Timestamp # FireflyCommands ,\r\n
              */
-            final String msg = mRxiryMsgHelper.getSendToOnboard(sb.toString());
+            final String msg = mOnboardSdkMsgHelper.getSendToOnboard(sb.toString());
 
             Handler handler = new Handler(Looper.getMainLooper());
             handler.post(new Runnable() {
@@ -154,7 +154,7 @@ public class DataDebugActivity extends AppCompatActivity {
             /**
              *  @ Timestamp $ RxiryCommands [params],\r\n
              */
-            final String msg = mRxiryMsgHelper.getSendToOnboard(sb.toString());
+            final String msg = mOnboardSdkMsgHelper.getSendToOnboard(sb.toString());
 
             Handler handler = new Handler(Looper.getMainLooper());
             handler.post(new Runnable() {
@@ -323,7 +323,7 @@ public class DataDebugActivity extends AppCompatActivity {
                                 mSerialMessage.append((char) b);
 
                                 if (b == 0x0A) {  // The ascii of '\n' is 0x0A.
-                                    final String str = mRxiryMsgHelper.parseReceivedFromOnboard(new String(mSerialMessage));
+                                    final String str = mOnboardSdkMsgHelper.parseReceivedFromOnboard(new String(mSerialMessage));
                                     Log.d(TAG, "onResult: recv:" + str);
 
                                     if (str.isEmpty()) break;

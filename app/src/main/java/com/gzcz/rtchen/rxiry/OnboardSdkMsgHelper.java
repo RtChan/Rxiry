@@ -6,11 +6,11 @@ import android.util.Log;
  * Created by Rt Chen on 2016/10/4.
  */
 
-public class RxiryMsgHelper {
-    private static final String TAG = "RxiryMsgHelper";
+public class OnboardSdkMsgHelper {
+    private static final String TAG = "OnboardSdkMsgHelper";
     static long mPreTime;
 
-    public RxiryMsgHelper() {
+    public OnboardSdkMsgHelper() {
         mPreTime = 0;
     }
 

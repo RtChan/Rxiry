@@ -12,11 +12,17 @@ import android.os.Looper;
 import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
+import android.view.View;
+import android.widget.Button;
 import android.widget.ScrollView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import java.io.UnsupportedEncodingException;
+
+import dji.common.error.DJIError;
 import dji.common.remotecontroller.DJIRCHardwareState;
+import dji.common.util.DJICommonCallbacks;
 import dji.sdk.base.DJIBaseProduct;
 import dji.sdk.flightcontroller.DJIFlightController;
 import dji.sdk.flightcontroller.DJIFlightControllerDelegate;
@@ -31,7 +37,7 @@ public class WorkActivity extends AppCompatActivity {
     private DJIRemoteController mRemoteController;
 
     StringBuffer mSerialMessage = new StringBuffer();
-    RxiryMsgHelper mRxiryMsgHelper = new RxiryMsgHelper();
+    OnboardSdkMsgHelper mOnboardSdkMsgHelper = new OnboardSdkMsgHelper();
 
     int curStep = 1;
     private TextView tv_ResultDisplay;
@@ -61,6 +67,9 @@ public class WorkActivity extends AppCompatActivity {
         setContentView(R.layout.activity_work);
         tv_ResultDisplay = (TextView) findViewById(R.id.tv_ResultDisplay);
         mScroll = (ScrollView) findViewById(R.id.DisplayArea);
+
+        Button btnMeasure = (Button) findViewById(R.id.btn_c2);
+        btnMeasure.setOnClickListener(new btnC2OnClickListener());
 
         setCallbackFunction();
 
@@ -95,7 +104,7 @@ public class WorkActivity extends AppCompatActivity {
                     mSerialMessage.append((char) b);
 
                     if (b == 0x0A) {  // The ascii of '\n' is 0x0A.
-                        final String str = mRxiryMsgHelper.parseReceivedFromOnboard(new String(mSerialMessage));
+                        final String str = mOnboardSdkMsgHelper.parseReceivedFromOnboard(new String(mSerialMessage));
                         Log.d(TAG, "onResult: recv:" + str);
 
                         if (str.isEmpty()) break;
@@ -137,6 +146,8 @@ public class WorkActivity extends AppCompatActivity {
                             Toast.makeText(getApplicationContext(), "右键C2按下", Toast.LENGTH_SHORT).show();
                         }
                     });
+
+                    measure();
                 }
             }
         });
@@ -248,6 +259,99 @@ public class WorkActivity extends AppCompatActivity {
                 tv_ResultDisplay.append("\r\n\r\n");
             }
         });
+    }
+
+    protected void measure() {
+        /**
+         *  @ Timestamp $ RxiryCommands [params],\r\n
+         */
+        StringBuilder sb_rxiry = new StringBuilder();
+        sb_rxiry.append("$");
+        sb_rxiry.append("ST");
+        sb_rxiry.append(",\r\n");
+        final String msg_rxiry = mOnboardSdkMsgHelper.getSendToOnboard(sb_rxiry.toString());
+
+        mMainLoopHandler.post(new Runnable() {
+            @Override
+            public void run() {
+                Toast.makeText(getApplicationContext(), "发送：" + msg_rxiry, Toast.LENGTH_SHORT).show();
+            }
+        });
+
+        if (mFlightController != null && mFlightController.isConnected()) {
+            byte bytes[];
+            try {
+                bytes = msg_rxiry.getBytes("ASCII");
+            } catch (UnsupportedEncodingException e) {
+                bytes = null;
+                e.printStackTrace();
+            }
+
+            if (null == bytes) return;
+
+            mFlightController.sendDataToOnboardSDKDevice(bytes, new DJICommonCallbacks.DJICompletionCallback() {
+                @Override
+                public void onResult(final DJIError djiError) {
+                    if (null != djiError) {
+                        mMainLoopHandler.post(new Runnable() {
+                            @Override
+                            public void run() {
+                                Toast.makeText(getApplicationContext(), "发生错误：" + djiError.getDescription(), Toast.LENGTH_SHORT).show();
+                            }
+                        });
+                    }
+                }
+            });
+        }
+
+//        /**
+//         *  @ Timestamp # FireflyCommands [params],\r\n
+//         */
+//        StringBuilder sb_firefly = new StringBuilder();
+//        sb_firefly.append('#');
+//        sb_firefly.append('P');
+//        sb_firefly.append(",\r\n");
+//        final String msg_firefly = mOnboardSdkMsgHelper.getSendToOnboard(sb_firefly.toString());
+//
+//        mMainLoopHandler.post(new Runnable() {
+//            @Override
+//            public void run() {
+//                Toast.makeText(getApplicationContext(), "发送：" + msg_firefly, Toast.LENGTH_SHORT).show();
+//            }
+//        });
+//
+//        if (mFlightController != null && mFlightController.isConnected()) {
+//            byte bytes[];
+//            try {
+//                bytes = msg_firefly.getBytes("ASCII");
+//            } catch (UnsupportedEncodingException e) {
+//                bytes = null;
+//                e.printStackTrace();
+//            }
+//
+//            if (null == bytes) return;
+//
+//            mFlightController.sendDataToOnboardSDKDevice(bytes, new DJICommonCallbacks.DJICompletionCallback() {
+//                @Override
+//                public void onResult(final DJIError djiError) {
+//                    if (null != djiError) {
+//                        mMainLoopHandler.post(new Runnable() {
+//                            @Override
+//                            public void run() {
+//                                Toast.makeText(getApplicationContext(), "发生错误：" + djiError.getDescription(), Toast.LENGTH_SHORT).show();
+//                            }
+//                        });
+//                    }
+//                }
+//            });
+//        }
+    }
+
+    class btnC2OnClickListener implements View.OnClickListener {
+        @Override
+        public void onClick(View view) {
+            measure();
+        }
     }
 
     @Override
