@@ -39,7 +39,8 @@ public class WorkActivity extends AppCompatActivity {
     StringBuffer mSerialMessage = new StringBuffer();
     OnboardSdkMsgHelper mOnboardSdkMsgHelper = new OnboardSdkMsgHelper();
 
-    int curStep = 1;
+    //int curStep = 1;
+    StageManager mStageManager;
     private TextView tv_ResultDisplay;
     ScrollView mScroll;
     Handler mMainLoopHandler = new Handler(Looper.getMainLooper());
@@ -72,6 +73,7 @@ public class WorkActivity extends AppCompatActivity {
         btnMeasure.setOnClickListener(new btnC2OnClickListener());
 
         setCallbackFunction();
+        mStageManager = new StageManager();
 
         IntentFilter filter = new IntentFilter();
         filter.addAction(DjiSdkApplication.FLAG_CONNECTION_CHANGE);
@@ -167,18 +169,38 @@ public class WorkActivity extends AppCompatActivity {
             return;
         }
 
-        if (1 == curStep || 2== curStep) {
-            if (rf.getType() == RxiryFormat.RXDataType.HV) {
-                RxiryFormat.HV hv = rf.getHV();
-                dispHV(hv, curStep);
+        if (rf.getType() == RxiryFormat.RXDataType.HV) {
+            RxiryFormat.HV hv = rf.getHV();
+            if (null != hv) {
+                mStageManager.addHV();
+                dispHV(hv, mStageManager.getHVIndex());
             }
         }
 
-        if (3 == curStep) {
-            if (rf.getType() == RxiryFormat.RXDataType.ML) {
-                RxiryFormat.ML ml = rf.getML();
+        if (rf.getType() == RxiryFormat.RXDataType.ML) {
+            RxiryFormat.ML ml = rf.getML();
+            if (null != ml) {
+                mStageManager.addML();
                 dispML(ml);
             }
+
+            // 收到了测量结果：ML 类型
+            if (mStageManager.isAvailable()) {
+                mMainLoopHandler.post(new Runnable() {
+                    @Override
+                    public void run() {
+                        tv_ResultDisplay.append("数据完整，已自动保存！\r\n");
+                    }
+                });
+            } else {
+                mMainLoopHandler.post(new Runnable() {
+                    @Override
+                    public void run() {
+                        tv_ResultDisplay.append("数据不完整，无法保存！\r\n");
+                    }
+                });
+            }
+            mStageManager.reset();
         }
 
         mMainLoopHandler.postDelayed(new Runnable() {
@@ -188,11 +210,6 @@ public class WorkActivity extends AppCompatActivity {
             }
         }, 500);
 
-        if (3 == curStep) {
-            curStep = 1;
-        } else {
-            ++curStep;
-        }
     }
 
     protected void dispHV(final RxiryFormat.HV hv, int index) {
@@ -255,7 +272,7 @@ public class WorkActivity extends AppCompatActivity {
                 tv_ResultDisplay.append("\r\n");
                 tv_ResultDisplay.append(getResources().getString(R.string.rxiry_AZ)
                         + String.valueOf(ml.AZ)
-                        + (ml.AZUnit  == RxiryFormat.RXUnitType.Degree ? "度" : "%"));
+                        + (ml.AZUnit == RxiryFormat.RXUnitType.Degree ? "度" : "%"));
                 tv_ResultDisplay.append("\r\n\r\n");
             }
         });
@@ -359,4 +376,45 @@ public class WorkActivity extends AppCompatActivity {
         mRemoteController.setHardwareStateUpdateCallback(null);
         super.onDestroy();
     }
+
+    protected class StageManager {
+        private int hv;
+        private int ml;
+        private boolean bad;
+
+        public StageManager() {
+            reset();
+        }
+
+        public StageManager addHV() {
+            hv = hv + 1;
+            return this;
+        }
+        public StageManager addML() {
+            // 防止 hv ml hv 错序的情况
+            if (hv != 2) {
+                bad = true;
+            }
+
+            ml = ml + 1;
+            return this;
+        }
+
+        public int getHVIndex() {
+            return hv;
+        }
+
+        public boolean isAvailable() {
+            boolean ret = ((hv == 2) && (ml == 1));
+            if (ret) reset();
+            return bad && ret;
+        }
+
+        public void reset() {
+            hv = 0;
+            ml = 0;
+            bad = false;
+        }
+    }
+
 }

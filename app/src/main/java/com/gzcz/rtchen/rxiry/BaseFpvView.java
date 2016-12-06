@@ -11,11 +11,16 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.RelativeLayout;
 
+import dji.common.VideoDataChannel;
+import dji.common.error.DJIError;
 import dji.common.product.Model;
+import dji.common.util.DJICommonCallbacks;
 import dji.sdk.airlink.DJILBAirLink;
 import dji.sdk.base.DJIBaseProduct;
 import dji.sdk.camera.DJICamera;
 import dji.sdk.codec.DJICodecManager;
+
+import static dji.sdk.missionmanager.missionstep.DJIShootPhotoStep.TAG;
 
 /**
  * This class is designed for showing the fpv video feed from the camera or Lightbridge 2.
@@ -71,6 +76,17 @@ public class BaseFpvView extends RelativeLayout implements TextureView.SurfaceTe
         }
 
         initSDKCallback();
+
+        try {
+            mProduct.getAirLink().getLBAirLink().setVideoDataChannel(VideoDataChannel.HDMI, new DJICommonCallbacks.DJICompletionCallback() {
+                @Override
+                public void onResult(DJIError djiError) {
+                    if (null != djiError) {
+                        Log.e(TAG, "onResult: " + djiError.getDescription(), null);
+                    }
+                }
+            });
+        } catch (Exception exception) {}
     }
 
     private void initSDKCallback() {
@@ -79,7 +95,6 @@ public class BaseFpvView extends RelativeLayout implements TextureView.SurfaceTe
 
             if (mProduct.getModel() != Model.UnknownAircraft) {
                 mProduct.getCamera().setDJICameraReceivedVideoDataCallback(mReceivedVideoDataCallback);
-
             } else {
                 mProduct.getAirLink().getLBAirLink().setDJIOnReceivedVideoCallback(mOnReceivedVideoCallback);
             }

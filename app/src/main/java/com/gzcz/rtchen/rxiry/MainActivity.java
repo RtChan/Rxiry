@@ -55,11 +55,8 @@ public class MainActivity extends AppCompatActivity {
         btn_Working = (Button) findViewById(R.id.btn_Working);
         btn_History.setOnClickListener(myBtnOnClickListener);
         btn_Working.setOnClickListener(myBtnOnClickListener);
-        // TODO: 2016/11/15 Clean the comment.
+        // TODO: 2016/11/15 Clean the comment but keep the code.
         //btn_Working.setEnabled(false);
-
-        RxiryFormat rf = new RxiryFormat("$XRPT,ML,5.5,0.0,5.5,M,0.0,D,270,D*B5");
-        rf.isChecksumValid();
 
         IntentFilter filter = new IntentFilter();
         filter.addAction(DjiSdkApplication.FLAG_CONNECTION_CHANGE);
