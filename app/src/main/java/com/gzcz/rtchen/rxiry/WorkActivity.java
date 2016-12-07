@@ -73,7 +73,14 @@ public class WorkActivity extends AppCompatActivity {
         btnMeasure.setOnClickListener(new btnC2OnClickListener());
 
         setCallbackFunction();
-        mStageManager = new StageManager();
+        mStageManager = new StageManager().setMode("VDML");
+
+        // TODO: Clean this Debug Code.
+        parseMessage("$XRPT,HV,3.0,0.0,3.0,M,-000.8,D,248,D,*64\r\n");
+        parseMessage("$XRPT,ML,0.1,0.0,0.1,M,0.0,D,270,D,*77\r\n");
+        parseMessage("$XRPT,HV,3.1,0.0,3.1,M,-000.8,D,248,D,*64\r\n");
+        parseMessage("$XRPT,HV,3.0,0.0,3.0,M,-000.8,D,248,D,*64\r\n");
+        parseMessage("$XRPT,ML,0.1,0.0,0.1,M,0.0,D,270,D,*77\r\n");
 
         IntentFilter filter = new IntentFilter();
         filter.addAction(DjiSdkApplication.FLAG_CONNECTION_CHANGE);
@@ -153,7 +160,6 @@ public class WorkActivity extends AppCompatActivity {
                 }
             }
         });
-
     }
 
     protected void parseMessage(String str) {
@@ -173,7 +179,8 @@ public class WorkActivity extends AppCompatActivity {
             RxiryFormat.HV hv = rf.getHV();
             if (null != hv) {
                 mStageManager.addHV();
-                dispHV(hv, mStageManager.getHVIndex());
+                dispTst(mStageManager.getHVIndex());
+                dispHV(hv);
             }
         }
 
@@ -181,25 +188,27 @@ public class WorkActivity extends AppCompatActivity {
             RxiryFormat.ML ml = rf.getML();
             if (null != ml) {
                 mStageManager.addML();
+                dispResult();
                 dispML(ml);
             }
+        }
 
-            // 收到了测量结果：ML 类型
-            if (mStageManager.isAvailable()) {
-                mMainLoopHandler.post(new Runnable() {
-                    @Override
-                    public void run() {
-                        tv_ResultDisplay.append("数据完整，已自动保存！\r\n");
-                    }
-                });
-            } else {
-                mMainLoopHandler.post(new Runnable() {
-                    @Override
-                    public void run() {
-                        tv_ResultDisplay.append("数据不完整，无法保存！\r\n");
-                    }
-                });
-            }
+        // 判断是否测量结束
+        if (StageManager.STAGE_DONE == mStageManager.getStage()) {
+            mMainLoopHandler.post(new Runnable() {
+                @Override
+                public void run() {
+                    tv_ResultDisplay.append("--> 数据完整，已自动保存！\r\n\r\n");
+                }
+            });
+            mStageManager.reset();
+        } else if (StageManager.STAGE_ERROR == mStageManager.getStage()) {
+            mMainLoopHandler.post(new Runnable() {
+                @Override
+                public void run() {
+                    tv_ResultDisplay.append("--> 数据不完整，无法保存！\r\n\r\n");
+                }
+            });
             mStageManager.reset();
         }
 
@@ -209,51 +218,29 @@ public class WorkActivity extends AppCompatActivity {
                 mScroll.fullScroll(ScrollView.FOCUS_DOWN);
             }
         }, 500);
-
     }
 
-    protected void dispHV(final RxiryFormat.HV hv, int index) {
-
-        if (1 == index) {
-            mMainLoopHandler.post(new Runnable() {
-                @Override
-                public void run() {
-                    tv_ResultDisplay.append("---测量点1---\r\n");
-                    tv_ResultDisplay.append(getResources().getString(R.string.rxiry_SD)
-                            + String.valueOf(hv.SD)
-                            + (hv.HVSUnit == RxiryFormat.RXUnitType.Metre ? "米" : "码"));
-                    tv_ResultDisplay.append("\r\n");
-                    tv_ResultDisplay.append(getResources().getString(R.string.rxiry_INC)
-                            + String.valueOf(hv.INC)
-                            + (hv.INCUnit == RxiryFormat.RXUnitType.Degree ? "度" : "%"));
-                    tv_ResultDisplay.append("\r\n");
-                }
-            });
-        }
-
-        if (2 == index) {
-            mMainLoopHandler.post(new Runnable() {
-                @Override
-                public void run() {
-                    tv_ResultDisplay.append("---测量点2---\r\n");
-                    tv_ResultDisplay.append(getResources().getString(R.string.rxiry_SD)
-                            + String.valueOf(hv.SD)
-                            + (hv.HVSUnit == RxiryFormat.RXUnitType.Metre ? "米" : "码"));
-                    tv_ResultDisplay.append("\r\n");
-                    tv_ResultDisplay.append(getResources().getString(R.string.rxiry_INC)
-                            + String.valueOf(hv.INC)
-                            + (hv.INCUnit == RxiryFormat.RXUnitType.Degree ? "度" : "%"));
-                    tv_ResultDisplay.append("\r\n");
-                }
-            });
-        }
+    protected void dispHV(final RxiryFormat.HV hv) {
+        mMainLoopHandler.post(new Runnable() {
+            @Override
+            public void run() {
+                //tv_ResultDisplay.append("---测量点1---\r\n");
+                tv_ResultDisplay.append(getResources().getString(R.string.rxiry_SD)
+                        + String.valueOf(hv.SD)
+                        + (hv.HVSUnit == RxiryFormat.RXUnitType.Metre ? "米" : "码"));
+                tv_ResultDisplay.append("\r\n");
+                tv_ResultDisplay.append(getResources().getString(R.string.rxiry_INC)
+                        + String.valueOf(hv.INC)
+                        + (hv.INCUnit == RxiryFormat.RXUnitType.Degree ? "度" : "%"));
+                tv_ResultDisplay.append("\r\n");
+            }
+        });
     }
-
     protected void dispML(final RxiryFormat.ML ml) {
         mMainLoopHandler.post(new Runnable() {
             @Override
             public void run() {
-                tv_ResultDisplay.append("---测量结果---\r\n");
+                //tv_ResultDisplay.append("---测量结果---\r\n");
                 tv_ResultDisplay.append(getResources().getString(R.string.rxiry_HD)
                         + String.valueOf(ml.HD)
                         + (ml.HVSUnit == RxiryFormat.RXUnitType.Metre ? "米" : "码"));
@@ -273,7 +260,23 @@ public class WorkActivity extends AppCompatActivity {
                 tv_ResultDisplay.append(getResources().getString(R.string.rxiry_AZ)
                         + String.valueOf(ml.AZ)
                         + (ml.AZUnit == RxiryFormat.RXUnitType.Degree ? "度" : "%"));
-                tv_ResultDisplay.append("\r\n\r\n");
+                tv_ResultDisplay.append("\r\n");
+            }
+        });
+    }
+    protected void dispTst(final int index) {
+        mMainLoopHandler.post(new Runnable() {
+            @Override
+            public void run() {
+                tv_ResultDisplay.append("---测量点" + index + "---\r\n");
+            }
+        });
+    }
+    protected void dispResult() {
+        mMainLoopHandler.post(new Runnable() {
+            @Override
+            public void run() {
+                tv_ResultDisplay.append("---测量结果---\r\n");
             }
         });
     }
@@ -380,7 +383,14 @@ public class WorkActivity extends AppCompatActivity {
     protected class StageManager {
         private int hv;
         private int ml;
-        private boolean bad;
+        //private boolean bad;
+
+        private String mode;
+        private int stage;
+        static final int STAGE_IDLE = 0;
+        static final int STAGE_PROCESSING = 1;
+        static final int STAGE_ERROR = 2;
+        static final int STAGE_DONE = 3;
 
         public StageManager() {
             reset();
@@ -392,8 +402,8 @@ public class WorkActivity extends AppCompatActivity {
         }
         public StageManager addML() {
             // 防止 hv ml hv 错序的情况
-            if (hv != 2) {
-                bad = true;
+            if ((hv != 2) && (mode.contains("ML"))) {
+                stage = STAGE_ERROR;
             }
 
             ml = ml + 1;
@@ -404,16 +414,34 @@ public class WorkActivity extends AppCompatActivity {
             return hv;
         }
 
-        public boolean isAvailable() {
-            boolean ret = ((hv == 2) && (ml == 1));
-            if (ret) reset();
-            return bad && ret;
+        public int getStage() {
+            if (mode.isEmpty()) return -1;  // 未设定当前测量模式
+            if (STAGE_ERROR == stage) return stage;   // 测量数据返回值是乱序的
+
+            switch (mode) {
+                case "VDML":
+                case "HDML":
+                case "SDML":
+                    if ((1 == hv) && (0 == ml)) stage = STAGE_PROCESSING;
+                    if ((2 == hv) && (0 == ml)) stage = STAGE_PROCESSING;
+                    if ((2 == hv) && (1 == ml)) stage = STAGE_DONE;
+                    break;
+                default:
+                    stage = STAGE_ERROR;
+            }
+
+            return stage;
         }
 
+        public StageManager setMode(String inMode) {
+            reset();
+            mode = inMode;
+            return this;
+        }
         public void reset() {
             hv = 0;
             ml = 0;
-            bad = false;
+            stage = STAGE_IDLE;
         }
     }
 

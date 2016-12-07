@@ -14,13 +14,13 @@ import java.util.Locale;
 public class StoreStructure {
     private static final String TAG = "StoreStructure";
 
-    public String Name;
-    public String TimeStamp;
-    public String RxiryMode;
-    public String RxiryValue_HV1;
-    public String RxiryValue_HV2;
-    public String RxiryValue_ML;
-    public String RxiryValue_HT;
+    private String Name;
+    private String TimeStamp;
+    private String RxiryMode;
+    private String RxiryValue_HV1;
+    private String RxiryValue_HV2;
+    private String RxiryValue_ML;
+    private String RxiryValue_HT;
 
     StoreStructure(String name) {
         Name = name;
@@ -50,12 +50,18 @@ public class StoreStructure {
         return TimeStamp;
     }
 
-    public void setTimeStamp() {
+    public StoreStructure setTimeStamp() {
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", new Locale("US","CN"));
         TimeStamp = sdf.format(new Date());
         Log.d(TAG, "setTimeStamp: " + TimeStamp);
+        return this;
     }
-    public void setTimeStamp(String date) {
+    public StoreStructure setTimeStamp(String date) {
         TimeStamp = date;
+        return this;
+    }
+    public StoreStructure setRxiryMode(String mode) {
+        RxiryMode = mode;
+        return this;
     }
 }

@@ -19,6 +19,22 @@ public class RxiryFormat {
     public enum RXUnitType {
         Metre, Yard, Degree, Percent, Unknown;
     }
+    public enum RXModeType {
+        HDML("HDML", "HD ML"), VDML("HDML", "VD ML"), SDML("SDML", "SD ML"), HT("HT", "HT");
+
+        private String mode;
+        private String describe;
+
+        private RXModeType(String mode, String describe) {
+            this.mode = mode;
+            this.describe = describe;
+        }
+
+        @Override
+        public String toString() {
+            return this.describe;
+        }
+    }
 
     public class HV {
         public RXDataType   HV      = RXDataType.Unknown;
