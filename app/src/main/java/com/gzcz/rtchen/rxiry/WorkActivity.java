@@ -79,11 +79,11 @@ public class WorkActivity extends AppCompatActivity {
         mStageManager = new StageManager().setMode("VDML");
 
         // TODO: Clean this Debug Code.
-        parseMessage("$XRPT,HV,3.0,0.0,3.0,M,-000.8,D,248,D,*64\r\n");
-        parseMessage("$XRPT,ML,0.1,0.0,0.1,M,0.0,D,270,D,*77\r\n");
-        parseMessage("$XRPT,HV,3.1,0.0,3.1,M,-000.8,D,248,D,*64\r\n");
-        parseMessage("$XRPT,HV,3.0,0.0,3.0,M,-000.8,D,248,D,*64\r\n");
-        parseMessage("$XRPT,ML,0.1,0.0,0.1,M,0.0,D,270,D,*77\r\n");
+//        parseMessage("$XRPT,HV,3.0,0.0,3.0,M,-000.8,D,248,D,*64\r\n");
+//        parseMessage("$XRPT,ML,0.1,0.0,0.1,M,0.0,D,270,D,*77\r\n");
+//        parseMessage("$XRPT,HV,3.1,0.0,3.1,M,-000.8,D,248,D,*64\r\n");
+//        parseMessage("$XRPT,HV,3.0,0.0,3.0,M,-000.8,D,248,D,*64\r\n");
+//        parseMessage("$XRPT,ML,0.1,0.0,0.1,M,0.0,D,270,D,*77\r\n");
 
         IntentFilter filter = new IntentFilter();
         filter.addAction(DjiSdkApplication.FLAG_CONNECTION_CHANGE);
@@ -393,7 +393,7 @@ public class WorkActivity extends AppCompatActivity {
         super.onDestroy();
     }
 
-    protected class StageManager {
+    private class StageManager {
         private int hv;
         private int ml;
         //private boolean bad;
