@@ -29,6 +29,7 @@ public class MainActivity extends AppCompatActivity {
     DJIBaseProduct mProduct = null;
 
     private static Handler mUIHandler = new Handler(Looper.getMainLooper());
+    //public  static SimpleDataManager mSDM;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -58,6 +59,8 @@ public class MainActivity extends AppCompatActivity {
         // TODO: 2016/11/15 Clean the comment but keep the code.
         //btn_Working.setEnabled(false);
 
+        //mSDM = new SimpleDataManager(getApplication());
+
         IntentFilter filter = new IntentFilter();
         filter.addAction(DjiSdkApplication.FLAG_CONNECTION_CHANGE);
         registerReceiver(mReceiver, filter);
@@ -66,11 +69,14 @@ public class MainActivity extends AppCompatActivity {
     private View.OnClickListener myBtnOnClickListener = new View.OnClickListener() {
         @Override
         public void onClick(View view) {
+            Intent intent;
             switch (view.getId()) {
                 case R.id.btn_History:
+                    intent = new Intent(MainActivity.this, HistoryActivity.class);
+                    startActivity(intent);
                     break;
                 case R.id.btn_Working:
-                    Intent intent = new Intent(MainActivity.this, WorkActivity.class);
+                    intent = new Intent(MainActivity.this, WorkActivity.class);
                     startActivity(intent);
 //                    finish();
                     break;

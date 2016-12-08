@@ -19,6 +19,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import java.io.UnsupportedEncodingException;
+import java.util.ArrayList;
 
 import dji.common.error.DJIError;
 import dji.common.remotecontroller.DJIRCHardwareState;
@@ -44,6 +45,8 @@ public class WorkActivity extends AppCompatActivity {
     private TextView tv_ResultDisplay;
     ScrollView mScroll;
     Handler mMainLoopHandler = new Handler(Looper.getMainLooper());
+
+    ArrayList<String> mDataList = new ArrayList<>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -175,6 +178,8 @@ public class WorkActivity extends AppCompatActivity {
             return;
         }
 
+        mDataList.add(str);
+
         if (rf.getType() == RxiryFormat.RXDataType.HV) {
             RxiryFormat.HV hv = rf.getHV();
             if (null != hv) {
@@ -201,6 +206,10 @@ public class WorkActivity extends AppCompatActivity {
                     tv_ResultDisplay.append("--> 数据完整，已自动保存！\r\n\r\n");
                 }
             });
+
+            new SimpleDataManager(getApplication()).addData(new StoreStructure("test", mDataList));
+            //MainActivity.mSDM.addData(new StoreStructure("test", mDataList));
+            mDataList.clear();
             mStageManager.reset();
         } else if (StageManager.STAGE_ERROR == mStageManager.getStage()) {
             mMainLoopHandler.post(new Runnable() {
@@ -209,6 +218,7 @@ public class WorkActivity extends AppCompatActivity {
                     tv_ResultDisplay.append("--> 数据不完整，无法保存！\r\n\r\n");
                 }
             });
+            mDataList.clear();
             mStageManager.reset();
         }
 
