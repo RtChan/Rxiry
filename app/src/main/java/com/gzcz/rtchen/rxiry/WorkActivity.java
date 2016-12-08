@@ -386,7 +386,10 @@ public class WorkActivity extends AppCompatActivity {
 
     @Override
     protected void onDestroy() {
-        mRemoteController.setHardwareStateUpdateCallback(null);
+        unregisterReceiver(mReceiver);
+        if (null != mRemoteController) {
+            mRemoteController.setHardwareStateUpdateCallback(null);
+        }
         super.onDestroy();
     }
 

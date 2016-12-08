@@ -43,8 +43,12 @@ public class SimpleDataManager {
         saveStoreStructureListToFile();
     }
 
-    public ArrayList<StoreStructure> getDatasList() {
+    public void cleanData() {
         mStoreStructureList.clear();
+        saveStoreStructureListToFile();
+    }
+
+    public ArrayList<StoreStructure> getDatasList() {
         readStoreStructureListFromeFile();
         return mStoreStructureList;
     }
