@@ -7,13 +7,22 @@
     android:keepScreenOn="true"
     tools:context="com.gzcz.rtchen.rxiry.WorkActivity">
 
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="#A0303030"/>
+
+    <com.gzcz.rtchen.rxiry.BaseFpvView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"/>
+
     <LinearLayout
         android:id="@+id/Background"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_alignParentStart="true"
+        android:orientation="horizontal"
         android:layout_alignParentTop="true"
-        android:orientation="horizontal">
+        android:layout_alignParentStart="true">
 
         <RelativeLayout
             android:id="@+id/FpvArea"
@@ -34,14 +43,16 @@
                     android:id="@+id/lb_Mode"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="测距仪当前模式：" />
+                    android:text="测距仪当前模式："
+                    android:textColor="@android:color/white" />
 
                 <TextView
                     android:id="@+id/tv_RxiryMode"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_toRightOf="@+id/lb_Mode"
-                    android:text="VD ML" />
+                    android:text="VD ML"
+                    android:textColor="@android:color/white" />
             </RelativeLayout>
 
 
@@ -54,9 +65,9 @@
                 android:layout_alignParentStart="true"
                 android:layout_below="@+id/RxiryModeArea">
 
-                <com.gzcz.rtchen.rxiry.BaseFpvView
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent" />
+                <!--<com.gzcz.rtchen.rxiry.BaseFpvView-->
+                    <!--android:layout_width="match_parent"-->
+                    <!--android:layout_height="match_parent" />-->
 
             </RelativeLayout>
 
@@ -78,7 +89,8 @@
                         android:id="@+id/lb_ProjectName"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="工程名称：" />
+                        android:text="工程名称："
+                        android:textColor="@android:color/white" />
 
                     <Spinner
                         android:id="@+id/sp_ProjectName"
@@ -100,7 +112,8 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_centerVertical="true"
-                        android:text="测量点名称：" />
+                        android:text="测量点名称："
+                        android:textColor="@android:color/white" />
 
                     <EditText
                         android:id="@+id/et_DotName"
@@ -109,7 +122,8 @@
                         android:layout_toEndOf="@+id/lb_DotName"
                         android:hint="请输入测量点名称"
                         android:inputType="text"
-                        android:maxLines="1" />
+                        android:maxLines="1"
+                        android:textColor="@android:color/white" />
 
                 </RelativeLayout>
             </LinearLayout>
@@ -120,7 +134,7 @@
             android:id="@+id/DataArea"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_weight="1.5"
+            android:layout_weight="2.5"
             android:orientation="vertical"
             android:paddingEnd="3dp"
             android:paddingTop="3dp"
@@ -131,14 +145,16 @@
                 android:text="测量结果历史"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:id="@+id/lb_DataTitle" />
+                android:id="@+id/lb_DataTitle"
+                android:textColor="@android:color/white" />
 
             <ScrollView
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:id="@+id/DisplayArea"
                 android:layout_below="@+id/lb_DataTitle"
-                android:layout_above="@+id/ControlArea">
+                android:layout_above="@+id/ControlArea"
+                android:fillViewport="false">
 
                 <LinearLayout
                     android:layout_width="match_parent"
@@ -148,7 +164,8 @@
                     <TextView
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:id="@+id/tv_ResultDisplay" />
+                        android:id="@+id/tv_ResultDisplay"
+                        android:textColor="@android:color/white" />
 
                 </LinearLayout>
             </ScrollView>

@@ -203,7 +203,7 @@ public class WorkActivity extends AppCompatActivity {
             mMainLoopHandler.post(new Runnable() {
                 @Override
                 public void run() {
-                    tv_ResultDisplay.append("--> 数据完整，已自动保存！\r\n\r\n");
+                    tv_ResultDisplay.append("--> 数据完整，\r\n-->已自动保存！\r\n\r\n");
                 }
             });
 
@@ -215,7 +215,7 @@ public class WorkActivity extends AppCompatActivity {
             mMainLoopHandler.post(new Runnable() {
                 @Override
                 public void run() {
-                    tv_ResultDisplay.append("--> 数据不完整，无法保存！\r\n\r\n");
+                    tv_ResultDisplay.append("--> 数据不完整，\r\n-->无法保存！\r\n\r\n");
                 }
             });
             mDataList.clear();
